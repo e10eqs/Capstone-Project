@@ -4,6 +4,8 @@
     https://github.com/aymericdamien/TensorFlow-Examples/blob/master/examples/3_NeuralNetworks/neural_network_raw.py
     and article:
     https://www.datacamp.com/community/tutorials/tensorflow-tutorial
+    goal of Network: use MNIST data to test and acheive acuracy of at least 90%
+    will use 3 hidden layers with 10 neurons in each layer
 """
 
 
@@ -50,7 +52,7 @@ logits = tf.contrib.layers.fully_connected(images_flat, 62, tf.nn.relu)  #connec
 
 cost = tf.reduce_mean(tf.nn.sparse_softmax_cross_entropy_with_logits(labels = y, logits = logits))      #define cost function likely will change later
 
-train_op = tf.train.GradientDescentOptimizer(learning_rate=.001).minimize(cost)      #train using stochastic gradient decesnt
+train_op = tf.train.GradientDescentOptimizer(learning_rate=.1275).minimize(cost)      #train using stochastic gradient decesnt
 
 correct_pred = tf.argmax(logits, 1)                                      #logits to lables
 
@@ -64,31 +66,30 @@ sess = tf.Session()
 
 sess.run(tf.global_variables_initializer())
 
-for i in range(250):
+for i in range(600):
         print('EPOCH', i)
         _, accuracy_val = sess.run([train_op, accuracy], feed_dict={x: images28, y: labels})
         if i % 10 == 0:
             print("Cost:", cost)
+            print ("Accuracy:", accuracy)
         print('DONE WITH EPOCH')
-# Pick 10 random images
-sample_indexes = random.sample(range(len(images28)), 10)
-sample_images = [images28[i] for i in sample_indexes]
-sample_labels = [labels[i] for i in sample_indexes]
 
-# Run the "predicted_labels" op.
-predicted = sess.run([correct_pred], feed_dict={x: sample_images})[0]
+sample_indexes = random.sample(range(len(images28)), 15)     #pick 15 images
+sample_images = [images28[i] for i in sample_indexes]       #get images
+sample_labels = [labels[i] for i in sample_indexes]         #get labels
 
-# Print the real and predicted labels
-print(sample_labels)
+predicted = sess.run([correct_pred], feed_dict={x: sample_images})[0]     #check label
+
+print(sample_labels)            #print labels and predictions
 print(predicted)
 
-fig = plt.figure(figsize=(10, 10))
+fig = plt.figure(figsize=(15, 15))          #create a plot of images and predictions
 for i in range(len(sample_images)):
     truth = sample_labels[i]
     prediction = predicted[i]
-    plt.subplot(5, 2,1+i)
+    plt.subplot(5, 3,1+i)
     plt.axis('off')
-    color='green' if truth == prediction else 'red'
+    color='green' if truth == prediction else 'red'         #green if correct, otherwise red
     plt.text(40, 10, "Truth:        {0}\nPrediction: {1}".format(truth, prediction),
              fontsize=12, color=color)
     plt.imshow(sample_images[i])
