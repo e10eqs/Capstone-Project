@@ -1,0 +1,47 @@
+"""
+Second Attempt at Network
+using tutorial from Tensorflow
+https://www.tensorflow.org/tutorials/keras/basic_classification
+This network will use the MNIST data set
+"""
+
+import tensorflow as tf                 #import all needed libraries
+from tensorflow import keras
+import numpy as np
+import mnist
+
+train_images = mnist.train_images()         #import MNIST data for training
+train_labels = mnist.train_labels()
+
+test_images = mnist.test_images()           #import MNIST data for testing
+test_labels = mnist.test_labels()
+
+model = keras.Sequential\
+(
+    [
+        keras.layers.Flatten(input_shape=(28,28)),          #flatten vectors
+        keras.layers.Dense(128, activation=tf.nn.sigmoid),  #create layer with 128 neurons and sigmoid activation
+        keras.layers.Dense(10, activation=tf.nn.softmax)    #create layer with 10 nuerons and softmax activatoin
+    ]
+)
+
+model.compile(optimizer='adam',                         #compile model using adam optimizer
+              loss='sparse_categorical_crossentropy',   #a loss function using sparse catagorical crossentropy
+              metrics=['accuracy'])                     #define what accuracy is
+
+model.fit(train_images,train_labels, epochs=10)          #train using 5 sets of data
+
+test_loss, test_acc = model.evaluate(test_images, test_labels)  #set how to evaluate model
+print('test accuracy', test_acc)                                #print accuracy metric
+
+predictions = model.predict(test_images)                        #creat predictions
+np.argmax(predictions[0])                                       #pick the maximimum value in predictions array
+
+print('predictions',predictions[0])                             #print test data of first 3 test images
+print('labels',test_labels[0])
+
+print('predictions',predictions[1])
+print('labels',test_labels[1])
+
+print('predictions',predictions[2])
+print('labels',test_labels[2])
