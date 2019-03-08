@@ -9,6 +9,8 @@ import tensorflow as tf                 #import all needed libraries
 from tensorflow import keras
 import numpy as np
 import mnist
+import random
+import matplotlib.pyplot as plt
 
 train_images = mnist.train_images()         #import MNIST data for training
 train_labels = mnist.train_labels()
@@ -16,32 +18,68 @@ train_labels = mnist.train_labels()
 test_images = mnist.test_images()           #import MNIST data for testing
 test_labels = mnist.test_labels()
 
+plt.figure()
+plt.imshow(train_images[0])
+plt.colorbar()
+plt.grid(False)
+plt.show()
+
+train_images = train_images / 255.0
+test_images = test_images / 255.0
+
+
+plt.figure()
+plt.imshow(train_images[0])
+plt.colorbar()
+plt.grid(False)
+plt.show()
+
+
 model = keras.Sequential\
 (
     [
         keras.layers.Flatten(input_shape=(28,28)),          #flatten vectors
         keras.layers.Dense(128, activation=tf.nn.sigmoid),  #create layer with 128 neurons and sigmoid activation
+        keras.layers.Dense(456, activation=tf.nn.relu),
+        keras.layers.Dense(128, activation=tf.nn.tanh),
         keras.layers.Dense(10, activation=tf.nn.softmax)    #create layer with 10 nuerons and softmax activatoin
     ]
 )
 
-model.compile(optimizer='adam',                         #compile model using adam optimizer
-              loss='sparse_categorical_crossentropy',   #a loss function using sparse catagorical crossentropy
-              metrics=['accuracy'])                     #define what accuracy is
+model.compile(optimizer= tf.train.GradientDescentOptimizer(learning_rate=.045),  #compile model using gradient descent
+              loss=['sparse_categorical_crossentropy'],   #a loss function using sparse catagorical crossentropy
+              metrics=['accuracy'])                       #define what accuracy is
 
-model.fit(train_images,train_labels, epochs=10)          #train using 5 sets of data
+model.fit(train_images,train_labels, epochs=5)          #train using 5 sets of data
 
 test_loss, test_acc = model.evaluate(test_images, test_labels)  #set how to evaluate model
-print('test accuracy', test_acc)                                #print accuracy metric
+print('test accuracy', test_acc * 100)                          #print accuracy metric
 
-predictions = model.predict(test_images)                        #creat predictions
-np.argmax(predictions[0])                                       #pick the maximimum value in predictions array
+#predictions = model.predict(test_images)                        #creat predictions                                      #pick the maximimum value in predictions array
 
-print('predictions',predictions[0])                             #print test data of first 3 test images
-print('labels',test_labels[0])
+test_images = np.array(test_images)
 
-print('predictions',predictions[1])
-print('labels',test_labels[1])
+sample_indexes = random.sample(range(len(test_images)), 15)      #pick 10 images
+sample_images = [test_images[i] for i in sample_indexes]         #get images
+sample_labels = [test_labels[i] for i in sample_indexes]         #get labels
 
-print('predictions',predictions[2])
-print('labels',test_labels[2])
+sample_images = np.array(sample_images)
+
+predictions = model.predict(sample_images)   #creat predictions                                      #pick the maximimum value in predictions array
+
+#print(predictions[0])
+#print(test_labels[0])
+
+
+fig = plt.figure(figsize=(15, 15))          #create a plot of images and predictions
+for i in range(len(sample_images)):
+    truth = sample_labels[i]
+    prediction = np.argmax(predictions[i])
+    plt.subplot(5, 3, 1 + i)
+    plt.axis('off')
+    color='green' if truth == prediction else 'red'         #green if correct, otherwise red
+    plt.text(40, 10, "Truth:        {0}\nPrediction: {1}".format(truth, prediction),
+             fontsize=12, color=color)
+    plt.imshow(sample_images[i])
+
+plt.show()
