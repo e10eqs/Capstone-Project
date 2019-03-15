@@ -1,0 +1,84 @@
+from tensorflow import keras        #import needed libraries
+import numpy as np
+import matplotlib.pyplot as plt
+from skimage import transform
+from skimage import util
+from skimage.color import rgb2gray
+from PIL import Image, ImageChops
+
+def DisplayPic(x):                            #create a function to display the image at its given state
+    plt.figure()
+    plt.imshow(x)
+    plt.colorbar()
+    plt.grid(False)
+    plt.show()
+
+def trim(im, border):                           #create function to trim image down to a rectangle
+    bg = Image.new(im.mode, im.size, border)
+    diff = ImageChops.difference(im, bg)
+    bbox = diff.getbbox()
+    if bbox:
+        return im.crop(bbox)
+
+pic1 = Image.open("/Users/ethanseath/Desktop/pi-send/boxtest4.jpg")    #open image
+
+gray = pic1.convert('L')            #convert pic1 to a grayscale image 0 - 255 (black - white)
+bw = np.array(gray).copy()          #convert to a numpy array
+
+DisplayPic(pic1)
+
+
+bw[bw < 235] = 0                    #make all numpy values either 0 or 255
+bw[bw >= 235] = 255
+pic_1 = Image.fromarray(bw)         #create an image from the numpy array
+
+DisplayPic(pic_1)
+
+pic_1 = trim(pic_1, 255)            #use trim function to get rid of all white space
+
+DisplayPic(pic_1)
+
+old_size = pic_1.size               #define size of the original image
+
+"""
+if ((old_size[0] + 10) < old_size[1]): #fix sizing if the number is 1
+    new_size = (int(round((old_size[0]) * 30)), int(round((old_size[0]) * 20)))
+    print('resize')
+else:
+    new_size = (int(round((old_size[0]) * 2)), int(round((old_size[1]) * 1.5)))   #for demoing pic from other cameras
+"""
+
+
+new_size = (50, 50)                                 #resize to 57 by 57
+x = int(round(new_size[0]-old_size[0]) / 2)         #find x coordinate for the center of the new image
+y = int(round(new_size[1]-old_size[1]) / 2)         #find y coordinate for the center of the new image
+pic = Image.new("RGB", new_size, (255, 255, 255))   #create white 40 by 40 image
+pic.paste(pic_1, (x, y))                            #paste original image in center
+
+DisplayPic(pic)
+
+pic = np.array(pic)                          #make image into an array to transform function
+
+pic = [transform.resize(pic, (28, 28))]      #resize image
+
+DisplayPic(pic[0])
+
+pic = np.array(pic)                          #make image into an array to grayscale function
+pic = rgb2gray(pic)                          #convert to gray scale (0.0-1.0)
+
+DisplayPic(pic[0])
+
+pic = util.invert(pic)                       #invert 0.0 and 1.0
+
+DisplayPic(pic[0])
+
+pic[pic < .1] = 0                          #take all of the values less than .125 and make them 0
+pic[pic >= .1] = 1
+
+DisplayPic(pic[0])
+
+new_model = keras.models.load_model('handwritingmodel.h5')   #use pre-trained model
+
+prediction = new_model.predict(pic)                     #predict the number
+
+print('predcition',np.argmax(prediction[0]))            #print the prediction
