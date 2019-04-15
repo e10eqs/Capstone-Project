@@ -1,4 +1,4 @@
-Neural Network
+#Neural Network
 
 
 Here are a my first few attempts at creating a nueral network
