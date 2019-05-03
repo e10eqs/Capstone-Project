@@ -3,6 +3,8 @@
 
 <img width="578" alt="Best lable" src="https://user-images.githubusercontent.com/46872807/57146020-021ed400-6d8a-11e9-96c7-daa7ff4aac60.png">
 
+Video of the Rover in action https://www.youtube.com/watch?v=8NFM5vZpSac
+
 The Factory Rover was developed as my senior capstone project in high school. My group decided to address efficiency in factories through an omnidirectional rover. The Factory Rover was intended to solve this issue by providing an automatic mapping system and by allowing remote control of the rover to move packages and materials. Though these goals were not achieved in to their highest expectations, we ended up with a unique project that met the majority of our goals. Our project is capable of reading handwritten digits and moving in different directions based on these digits and is capable of being controlled manually over WIFI. Our Rover can move in all directions because of the use of mecanum wheels in its design.
 ## Arduino Control
 The Arduino acts as the master controller of inputs and outputs within the system. This means that the Arduino communicates with the Raspberry Pi via serial, receives digital inputs from the on-board switches/button, and controls the LCD display and motors. With all these inputs, the Arduino is constantly checking for conditions to be met and running if loops. Once conditions are met, the Arduino updates the LCD display and runs motors accordingly.
