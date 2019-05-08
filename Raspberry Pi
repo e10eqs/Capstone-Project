@@ -30,7 +30,7 @@ def DisplayPic(x):                            #create a function to display the 
     plt.show()
 
 def TakePic():
-    camera.resolution = (64, 64)                   #set resolution to 28 by 28 pixel- for NN
+    camera.resolution = (64, 64)                   #set resolution to 64 by 64 pixel- for NN
     camera.color_effects = (128, 128)              #Grayscale
     camera.zoom = (0.05, 0.05, 1, 1)               #zoom
     camera.brightness = 80
@@ -58,10 +58,10 @@ def NN():
         
     old_size = pic_1.size               #define size of the original imag
         
-    new_size = (65, 65)                                 #resize to 57 by 57
+    new_size = (65, 65)                                 #resize to 65 by 65
     x = int(round(new_size[0]-old_size[0]) / 2)         #find x coordinate for the center of the new image
     y = int(round(new_size[1]-old_size[1]) / 2)         #find y coordinate for the center of the new image
-    pic = Image.new("RGB", new_size, (255, 255, 255))   #create white 40 by 40 image
+    pic = Image.new("RGB", new_size, (255, 255, 255))
     pic.paste(pic_1, (x, y))                            #paste original image in center
 
     pic = np.array(pic)                          #make image into an array to transform function
@@ -84,7 +84,7 @@ def NN():
         
     new_model = keras.models.load_model('/home/pi/Desktop/handwritingmodel .h5')   #use pre-trained model
         
-    prediction = new_model.predict(pic)                     #predict the number
+    prediction = new_model.predict(pic)
     number = np.argmax(prediction[0])
     return str(number)
         
