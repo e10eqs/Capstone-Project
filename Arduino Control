@@ -224,7 +224,7 @@ void camera()
     screen.clear();
     if (s_in == 1) //forward
     {
-      screen.print("Number from Pi"); //insert data from pi
+      screen.print("Number from Pi"); 
       screen.setCursor(1, 2);
       screen.print(s_in);
 
@@ -250,7 +250,7 @@ void camera()
     }
     else if (s_in == 2) //backward
     {
-      screen.print("Number from Pi"); //insert data from pi
+      screen.print("Number from Pi");
       screen.setCursor(1, 2);
       screen.print(s_in);
 
@@ -273,7 +273,7 @@ void camera()
     }
     else if (s_in == 3) //left
     {
-      screen.print("Number from Pi"); //insert data from pi
+      screen.print("Number from Pi");
       screen.setCursor(1, 2);
       screen.print(s_in);
 
@@ -296,7 +296,7 @@ void camera()
     }
     else if (s_in == 4) //right
     {
-      screen.print("Number from Pi"); //insert data from pi
+      screen.print("Number from Pi");
       screen.setCursor(1, 2);
       screen.print(s_in);
 
@@ -319,7 +319,7 @@ void camera()
     }
     else if (s_in == 5) // up left
     {
-      screen.print("Number from Pi"); //insert data from pi
+      screen.print("Number from Pi");
       screen.setCursor(1, 2);
       screen.print(s_in);
 
@@ -342,7 +342,7 @@ void camera()
     }
     else if (s_in == 6) //down left
     {
-      screen.print("Number from Pi"); //insert data from pi
+      screen.print("Number from Pi");
       screen.setCursor(1, 2);
       screen.print(s_in);
 
@@ -365,7 +365,7 @@ void camera()
     }
     else if (s_in == 7) // down right
     {
-      screen.print("Number from Pi"); //insert data from pi
+      screen.print("Number from Pi");
       screen.setCursor(1, 2);
       screen.print(s_in);
 
@@ -388,7 +388,7 @@ void camera()
     }
     else if (s_in == 8) //up right
     {
-      screen.print("Number from Pi"); //insert data from pi
+      screen.print("Number from Pi");
       screen.setCursor(1, 2);
       screen.print(s_in);
 
@@ -410,7 +410,7 @@ void camera()
     }
     else if (s_in == 9) //spin ccw
     {
-      screen.print("Number from Pi"); //insert data from pi
+      screen.print("Number from Pi");
       screen.setCursor(1, 2);
       screen.print(s_in);
 
@@ -433,7 +433,7 @@ void camera()
     }
     else if (s_in == 0) //spin cw
     {
-      screen.print("Number from Pi"); //insert data from pi
+      screen.print("Number from Pi");
       screen.setCursor(1, 2);
       screen.print(s_in);
 
@@ -459,15 +459,15 @@ void camera()
 
 void loop()
 {
-  mbuttonstate = digitalRead(manualbutton); //check the button state//check the button state
-  cbuttonstate = digitalRead(camerabutton);  // if (mbuttonstate == 0) //if manual button pressed run manual button function
+  mbuttonstate = digitalRead(manualbutton); //check the button states
+  cbuttonstate = digitalRead(camerabutton);  
 
-  if ((mbuttonstate == 0) && (cbuttonstate == 1))
+  if ((mbuttonstate == 0) && (cbuttonstate == 1)) //if the manual mode switch is flipped run manual()
   {
     manual();
   }
 
-  else if ((cbuttonstate == 0) && (mbuttonstate == 1))// if camera button pressed run maual button function
+  else if ((cbuttonstate == 0) && (mbuttonstate == 1))// if camera switch is flipped run camera()
   {
     camera();
   }
