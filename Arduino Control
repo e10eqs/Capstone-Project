@@ -53,17 +53,18 @@ void setup()
   screen.noBlink();
 }
 
-
-void manual()
+void stopMotion(int b)
 {
-  int a = 50;    //delay
-  s_out = 'm';
-  Serial.println(s_out);                             //send string to pi
-  screen.print("Manual Mode"); //lcd display reads maual mode
-  screen.noBlink();
-  s_in = 1;
-  s_in = s_in * (Serial.read() - '0');    //convert to int
-
+  if (b == 1)
+  {
+    for (int i = 0; i < 8; i++)
+    {
+      analogWrite(motor[i], 0);
+    }
+  }
+}
+void motion(int a, int b)
+{
   if (s_in == 1) //forward
   {
     Serial.println("up");
@@ -77,6 +78,7 @@ void manual()
     analogWrite(motor[4], s);
     analogWrite(motor[6], s);
     delay(a);
+    stopMotion(b);
   }
 
   if (s_in == 2) //backward
@@ -92,6 +94,7 @@ void manual()
     analogWrite(motor[5], s);
     analogWrite(motor[7], s);
     delay(a);
+    stopMotion(b);
   }
 
   if (s_in == 3) //left
@@ -106,6 +109,7 @@ void manual()
     analogWrite(motor[4], s);
     analogWrite(motor[7], s);
     delay(a);
+    stopMotion(b);
   }
 
   if (s_in == 4) //right
@@ -120,6 +124,7 @@ void manual()
     analogWrite(motor[2], s);
     analogWrite(motor[5], s);
     delay(a);
+    stopMotion(b);
   }
 
   if (s_in == 5) //up left
@@ -134,6 +139,7 @@ void manual()
     analogWrite(motor[0], s);
     analogWrite(motor[4], s);
     delay(a);
+    stopMotion(b);
   }
 
   if (s_in == 6) //down right
@@ -148,6 +154,7 @@ void manual()
     analogWrite(motor[3], s);
     analogWrite(motor[7], s);
     delay(a);
+    stopMotion(b);
   }
 
   if (s_in == 7) //up left
@@ -162,6 +169,7 @@ void manual()
     analogWrite(motor[2], s);
     analogWrite(motor[6], s);
     delay(a);
+    stopMotion(b);
   }
 
   if (s_in == 8) //down left
@@ -176,6 +184,7 @@ void manual()
     analogWrite(motor[1], s);
     analogWrite(motor[5], s);
     delay(a);
+    stopMotion(b);
   }
 
   if (s_in == 9) //spin ccw
@@ -190,6 +199,7 @@ void manual()
     analogWrite(motor[7], s);
     analogWrite(motor[4], s);
     delay(a);
+    stopMotion(b);
   }
 
   if (s_in == 0) //off
@@ -200,6 +210,17 @@ void manual()
     }
     delay(a);
   }
+}
+
+void manual()
+{
+  s_out = 'm';
+  Serial.println(s_out);                             //send string to pi
+  screen.print("Manual Mode"); //lcd display reads maual mode
+  screen.noBlink();
+  s_in = 1;
+  s_in = s_in * (Serial.read() - '0');    //convert to int
+  motion(50, 0);
   delay(250);
   screen.clear();
 }
@@ -218,256 +239,26 @@ void camera()
   }
   if (Serial.available())                        //if connection is avalible
   {
-    int b = 2000;
     s_in = 1;
     s_in = s_in * (Serial.read() - '0');    //convert to int
     screen.clear();
-    if (s_in == 1) //forward
-    {
-      screen.print("Number from Pi"); 
-      screen.setCursor(1, 2);
-      screen.print(s_in);
-
-      analogWrite(motor[1], 0);
-      analogWrite(motor[3], 0);
-      analogWrite(motor[5], 0);
-      analogWrite(motor[7], 0);
-
-      analogWrite(motor[0], s);
-      analogWrite(motor[2], s);
-      analogWrite(motor[4], s);
-      analogWrite(motor[6], s);
-
-      Serial.println("go");
-      delay(b);
-      screen.clear();
-
-      for (int i = 0; i < 8; i++)
-      {
-        analogWrite(motor[i], 0);
-      }
-
-    }
-    else if (s_in == 2) //backward
-    {
-      screen.print("Number from Pi");
-      screen.setCursor(1, 2);
-      screen.print(s_in);
-
-      analogWrite(motor[0], 0);
-      analogWrite(motor[2], 0);
-      analogWrite(motor[4], 0);
-      analogWrite(motor[6], 0);
-
-
-      analogWrite(motor[1], s);
-      analogWrite(motor[3], s);
-      analogWrite(motor[5], s);
-      analogWrite(motor[7], s);
-      delay(b);
-      screen.clear();
-      for (int i = 0; i < 8; i++)
-      {
-        analogWrite(motor[i], 0);
-      }
-    }
-    else if (s_in == 3) //left
-    {
-      screen.print("Number from Pi");
-      screen.setCursor(1, 2);
-      screen.print(s_in);
-
-      analogWrite(motor[1], 0);
-      analogWrite(motor[6], 0);
-      analogWrite(motor[2], 0);
-      analogWrite(motor[5], 0);
-
-      analogWrite(motor[0], s);
-      analogWrite(motor[3], s);
-      analogWrite(motor[4], s);
-      analogWrite(motor[7], s);
-
-      delay(b);
-      screen.clear();
-      for (int i = 0; i < 8; i++)
-      {
-        analogWrite(motor[i], 0);
-      }
-    }
-    else if (s_in == 4) //right
-    {
-      screen.print("Number from Pi");
-      screen.setCursor(1, 2);
-      screen.print(s_in);
-
-      analogWrite(motor[0], 0);
-      analogWrite(motor[3], 0);
-      analogWrite(motor[4], 0);
-      analogWrite(motor[7], 0);
-
-      analogWrite(motor[1], s);
-      analogWrite(motor[6], s);
-      analogWrite(motor[2], s);
-      analogWrite(motor[5], s);
-
-      delay(b);
-      screen.clear();
-      for (int i = 0; i < 8; i++)
-      {
-        analogWrite(motor[i], 0);
-      }
-    }
-    else if (s_in == 5) // up left
-    {
-      screen.print("Number from Pi");
-      screen.setCursor(1, 2);
-      screen.print(s_in);
-
-      analogWrite(motor[1], 0);
-      analogWrite(motor[2], 0);
-      analogWrite(motor[3], 0);
-      analogWrite(motor[6], 0);
-      analogWrite(motor[5], 0);
-      analogWrite(motor[7], 0);
-
-      analogWrite(motor[0], s);
-      analogWrite(motor[4], s);
-
-      delay(b);
-      screen.clear();
-      for (int i = 0; i < 8; i++)
-      {
-        analogWrite(motor[i], 0);
-      }
-    }
-    else if (s_in == 6) //down left
-    {
-      screen.print("Number from Pi");
-      screen.setCursor(1, 2);
-      screen.print(s_in);
-
-      analogWrite(motor[0], 0);
-      analogWrite(motor[1], 0);
-      analogWrite(motor[2], 0);
-      analogWrite(motor[5], 0);
-      analogWrite(motor[6], 0);
-      analogWrite(motor[4], 0);
-
-      analogWrite(motor[7], s);
-      analogWrite(motor[3], s);
-
-      delay(b);
-      screen.clear();
-      for (int i = 0; i < 8; i++)
-      {
-        analogWrite(motor[i], 0);
-      }
-    }
-    else if (s_in == 7) // down right
-    {
-      screen.print("Number from Pi");
-      screen.setCursor(1, 2);
-      screen.print(s_in);
-
-      analogWrite(motor[0], 0);
-      analogWrite(motor[2], 0);
-      analogWrite(motor[3], 0);
-      analogWrite(motor[4], 0);
-      analogWrite(motor[5], 0);
-      analogWrite(motor[6], 0);
-
-      analogWrite(motor[1], s);
-      analogWrite(motor[5], s);
-
-      delay(b);
-      screen.clear();
-      for (int i = 0; i < 8; i++)
-      {
-        analogWrite(motor[i], 0);
-      }
-    }
-    else if (s_in == 8) //up right
-    {
-      screen.print("Number from Pi");
-      screen.setCursor(1, 2);
-      screen.print(s_in);
-
-      analogWrite(motor[0], 0);
-      analogWrite(motor[1], 0);
-      analogWrite(motor[2], 0);
-      analogWrite(motor[4], 0);
-      analogWrite(motor[6], 0);
-      analogWrite(motor[7], 0);
-
-      analogWrite(motor[3], s);
-      analogWrite(motor[7], s);
-      delay(b);
-      screen.clear();
-      for (int i = 0; i < 8; i++)
-      {
-        analogWrite(motor[i], 0);
-      }
-    }
-    else if (s_in == 9) //spin ccw
-    {
-      screen.print("Number from Pi");
-      screen.setCursor(1, 2);
-      screen.print(s_in);
-
-      analogWrite(motor[0], 0);
-      analogWrite(motor[3], 0);
-      analogWrite(motor[5], 0);
-      analogWrite(motor[6], 0);
-
-      analogWrite(motor[1], s);
-      analogWrite(motor[2], s);
-      analogWrite(motor[7], s);
-      analogWrite(motor[4], s);
-
-      delay(b);
-      screen.clear();
-      for (int i = 0; i < 8; i++)
-      {
-        analogWrite(motor[i], 0);
-      }
-    }
-    else if (s_in == 0) //spin cw
-    {
-      screen.print("Number from Pi");
-      screen.setCursor(1, 2);
-      screen.print(s_in);
-
-      analogWrite(motor[1], 0);
-      analogWrite(motor[2], 0);
-      analogWrite(motor[4], 0);
-      analogWrite(motor[7], 0);
-
-      analogWrite(motor[0], s);
-      analogWrite(motor[3], s);
-      analogWrite(motor[5], s);
-      analogWrite(motor[6], s);
-
-      delay(b);
-      screen.clear();
-      for (int i = 0; i < 8; i++)
-      {
-        analogWrite(motor[i], 0);
-      }
-    }
+    screen.print("Number - ");
+    screen.print(s_in);
+    motion(2000, 1);
   }
 }
 
 void loop()
 {
-  mbuttonstate = digitalRead(manualbutton); //check the button states
-  cbuttonstate = digitalRead(camerabutton);  
+  mbuttonstate = digitalRead(manualbutton); //check the button state//check the button state
+  cbuttonstate = digitalRead(camerabutton);  // if (mbuttonstate == 0) //if manual button pressed run manual button function
 
-  if ((mbuttonstate == 0) && (cbuttonstate == 1)) //if the manual mode switch is flipped run manual()
+  if ((mbuttonstate == 0) && (cbuttonstate == 1))
   {
     manual();
   }
 
-  else if ((cbuttonstate == 0) && (mbuttonstate == 1))// if camera switch is flipped run camera()
+  else if ((cbuttonstate == 0) && (mbuttonstate == 1))// if camera button pressed run maual button function
   {
     camera();
   }
